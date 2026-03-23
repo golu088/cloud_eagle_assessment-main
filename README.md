@@ -1,149 +1,118 @@
+# 🚀 GitHub Repository Access Analyzer
 
-
----
-
-# 🚀 GitHub Access Report System
-
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.4-brightgreen.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)
 ![Java](https://img.shields.io/badge/Java-17-blue.svg)
-![WebFlux](https://img.shields.io/badge/Spring%20WebFlux-Reactive-blueviolet.svg)
+![WebFlux](https://img.shields.io/badge/WebFlux-Reactive-blueviolet.svg)
 
-> ⚡ A scalable, production-ready backend system designed to efficiently manage access insights across large GitHub organizations.
-
----
-
-## 📌 Overview
-
-The **GitHub Access Report System** is a robust backend service built using Spring Boot that integrates with the GitHub REST API to generate structured access reports for organizations.
-
-It aggregates repository and collaborator data and transforms it into a **user-centric access model**, providing clear visibility into which users have access to which repositories.
-
-The system is designed for **high performance, scalability, and maintainability**, making it suitable for enterprise-scale environments.
+> ⚡ A scalable backend service that provides clear insights into repository access across GitHub organizations.
 
 ---
 
-## 🎯 Problem Statement
+## 📌 Project Description
 
-Managing repository access across large organizations is complex and often lacks visibility.
+The **GitHub Repository Access Analyzer** is a backend system built using Spring Boot that connects with the GitHub API to analyze access control within an organization.
 
-This system solves the problem by:
-
-* Aggregating repository and collaborator data
-* Mapping users to repositories they can access
-* Providing a clean REST API for access reporting
+It collects repository and collaborator information and converts it into a **user-focused access report**, helping teams understand who has access to which repositories.
 
 ---
 
-## ✨ Key Features
+## 🎯 Objective
 
-### ⚡ High Performance & Scalability
+This project helps to:
 
-* Parallel data fetching using `CompletableFuture`
-* Handles large datasets (100+ repositories, 1000+ users)
+* Retrieve all repositories of an organization
+* Identify users with access to each repository
+* Generate a structured report mapping users to repositories
+* Provide this data via a REST API
 
-### 🔄 Reactive API Communication
+---
 
-* Uses Spring **WebClient (WebFlux)** for non-blocking API calls
-* Improves performance in I/O-heavy operations
+## ✨ Features
+
+### ⚡ Scalable & Fast
+
+* Parallel API calls using `CompletableFuture`
+* Supports large organizations (100+ repos, 1000+ users)
+
+### 🔄 Reactive API Calls
+
+* Uses Spring WebClient (non-blocking)
+* Better performance for network operations
 
 ### 📄 Pagination Handling
 
-* Efficient handling of GitHub API pagination (`per_page=100`)
-* Ensures complete data retrieval
+* Uses `per_page=100` to fetch complete data
 
-### 🧠 Intelligent Caching
+### 🧠 Caching
 
-* Integrated **Caffeine Cache** with `@Cacheable`
-* Reduces redundant API calls and improves speed
+* Caffeine Cache integration
+* Reduces repeated API calls
 
-### 🛡️ Robust Error Handling
+### 🛡️ Error Handling
 
-* Centralized exception handling using `@ControllerAdvice`
-* Handles:
-
-  * `401 Unauthorized`
-  * `403 Forbidden (Rate Limit)`
-  * `404 Not Found`
-
-### 🧩 Clean Architecture
-
-```
-controller/
-service/
-client/
-model/
-config/
-```
+* Global exception handling
+* Handles 401, 403, 404 errors
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category    | Technology                           |
-| ----------- | ------------------------------------ |
-| Language    | Java 17                              |
-| Framework   | Spring Boot 3.2.4                    |
-| Web Layer   | Spring MVC + WebFlux                 |
-| HTTP Client | WebClient                            |
-| Concurrency | CompletableFuture, ConcurrentHashMap |
-| Caching     | Caffeine                             |
-| Testing     | JUnit 5, Mockito                     |
-| Build Tool  | Maven                                |
+* Java 17
+* Spring Boot
+* Spring WebFlux
+* WebClient
+* CompletableFuture
+* Caffeine Cache
+* Maven
 
 ---
 
 ## 🏗️ System Flow
 
-1. Authenticate using GitHub Personal Access Token (PAT)
-2. Fetch all repositories of the organization
-3. For each repository:
-
-   * Fetch collaborators using parallel API calls
-4. Transform data:
-
-   * Convert **Repository → Users** into **User → Repositories**
-5. Cache results for faster repeated access
-6. Return structured JSON response via REST API
+1. Authenticate using GitHub Token
+2. Fetch organization repositories
+3. Fetch collaborators for each repo
+4. Convert data into user → repositories mapping
+5. Cache results
+6. Return JSON response via API
 
 ---
 
-## ⚙️ Setup & Configuration
+## ⚙️ Setup
 
-### 1️⃣ Prerequisites
+### 🔹 Prerequisites
 
 * Java 17+
-* Maven installed
-* GitHub Personal Access Token (PAT)
+* Maven
+* GitHub Personal Access Token
 
-Required scopes:
+Required permissions:
 
-* `repo`
-* `read:org`
+* repo
+* read:org
 
 ---
 
-### 2️⃣ Configuration
+### 🔹 Configuration
 
 Update `application.yml`:
 
 ```yaml
 github:
-  token: ghp_YOUR_GITHUB_TOKEN
-  org: your-organization-name
+  token: YOUR_TOKEN
+  org: YOUR_ORG_NAME
 ```
-
-⚠️ Never commit your actual token to GitHub.
 
 ---
 
-### 3️⃣ Build & Run
+### 🔹 Run Project
 
 ```bash
 mvn clean install
 mvn spring-boot:run
 ```
 
-Application runs at:
+App runs on:
 
 ```
 http://localhost:8080
@@ -151,9 +120,9 @@ http://localhost:8080
 
 ---
 
-## 📡 API Usage
+## 📡 API Endpoint
 
-### 🔹 Endpoint
+### GET Access Report
 
 ```
 GET /access-report
@@ -161,74 +130,51 @@ GET /access-report
 
 ---
 
-### 📄 Sample Response
+## 📄 Sample Response
 
 ```json
 {
-  "octocat": [
-    "Hello-World",
-    "Spoon-Knife"
-  ],
-  "torvalds": [
-    "linux",
-    "git"
-  ],
-  "defunkt": [
-    "github-services"
-  ]
+  "userA": ["repo1", "repo2"],
+  "userB": ["repo2"],
+  "userC": ["repo3"]
 }
 ```
 
 ---
 
-### 🔍 Response Format
+## ⚠️ Rate Limit Handling
 
-* **Key** → GitHub username
-* **Value** → List of repositories accessible by the user
-
----
-
-## ⚠️ Rate Limiting Strategy
-
-GitHub API rate limits (~5000 requests/hour) are handled by:
-
-* Caching using Caffeine
-* Efficient parallel API calls
-* Minimizing redundant requests
-
-Future improvement:
-
-* Retry mechanism with exponential backoff
+* Caching used to reduce API calls
+* Parallel execution improves efficiency
 
 ---
 
 ## 🧠 Design Decisions
 
-* User-centric mapping for better readability
-* Parallel execution to reduce response time
-* Reactive WebClient for efficient I/O
-* Caching layer for improved performance
+* User-based mapping for clarity
+* Parallel execution for speed
+* Reactive API calls for performance
+* Caching for optimization
 
 ---
 
 ## 📌 Assumptions
 
-* GitHub token has required permissions
-* Organization data is accessible
-* Only active collaborators are included
+* Valid GitHub token provided
+* Organization is accessible
+* Only active collaborators included
 
 ---
 
-## ⭐ Final Note
+## ⭐ Conclusion
 
 This project demonstrates:
 
-* Scalable API integration
+* API integration with GitHub
+* Scalable backend design
 * Concurrency handling
-* Performance optimization
-* Clean backend architecture
-
-It reflects real-world, production-level backend engineering practices.
+* Clean and maintainable code
 
 ---
 
+💻 Built for learning and real-world backend practice.
